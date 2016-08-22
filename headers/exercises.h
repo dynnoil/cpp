@@ -8,5 +8,8 @@
 unsigned gcd(unsigned a, unsigned b);
 int reverseNumbersWithRecursion();
 void rotateArray(int *m, unsigned size, int shift);
+unsigned getStringLength(const char *str);
+void strcat(char *to, const char *from);
+int strstr(const char *text, const char *pattern);
 
 #endif //FIRST_EXERSICES_H

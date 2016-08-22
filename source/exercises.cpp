@@ -34,3 +34,51 @@ void rotateArray(int *m, unsigned size, int shift) {
     }
 }
 
+unsigned getStringLength(const char *str) {
+    unsigned length = 0;
+    while (*str++ != '\0') {
+        length++;
+    }
+    return length;
+}
+
+void strcat(char *to, const char *from) {
+    while (*to++ != '\0');
+    to--;
+    while (*from != '\0') {
+        *to++ = *from;
+        from++;
+    }
+    *to = '\0';
+}
+
+int strstr(const char *text, const char *pattern) {
+    unsigned patternLength = getStringLength(pattern);
+    unsigned position = 0;
+    unsigned firstEntryPosition = 0;
+    unsigned caught = 0;
+    while (*text != '\0') {
+        if (caught == 1) {
+            firstEntryPosition = position - 1;
+        }
+        if (patternLength == caught) {
+            return firstEntryPosition;
+        }
+        while (*pattern != '\0') {
+            if (*text == *pattern) {
+                caught++;
+            } else {
+                for (int i = 0; i < caught; i++) {
+                    pattern--;
+                }
+                caught = 0;
+                break;
+            }
+            pattern++;
+            break;
+        }
+        text++;
+        position++;
+    }
+    return -1;
+}
