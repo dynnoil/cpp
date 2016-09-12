@@ -4,6 +4,82 @@
 
 #ifndef FIRST_EXAMPLES_H
 #define FIRST_EXAMPLES_H
+#include <algorithm>
+#include <string>
+using namespace std;
+
+class ICloneable {
+public:
+    virtual ~ICloneable() {}
+    virtual ICloneable* clone() = 0;
+};
+
+class Employee {
+public:
+    virtual string occupation() const = 0;
+    virtual ~Employee() {}
+};
+
+class Manager : public Employee {
+    string name_;
+    string occupation_;
+
+public:
+    Manager(string name, string occupation) :
+            name_(name), occupation_(occupation)
+    {}
+
+    string occupation() const {
+        return occupation_;
+    }
+
+};
+
+class Coder : public Employee {
+    string name_;
+    string occupation_;
+
+public:
+    Coder(string name, string occupation) :
+            name_(name), occupation_(occupation)
+    {}
+
+    string occupation() const {
+        return occupation_;
+    }
+};
+
+struct File {
+    void write(const char *s);
+};
+
+struct FormattedFile : File {
+    using File::write;
+    void write(int i);
+    void write(double d);
+};
+
+class Person : ICloneable {
+    string name;
+    unsigned age;
+public:
+    Person(string name, unsigned age) :
+            name(name),
+            age(age)
+    {}
+    Person* clone() {
+        return new Person(*this);
+    }
+};
+
+class Student : Person {
+    string university;
+public:
+    Student(string name, unsigned age, string university):
+            Person(name, age), university(university)
+    {}
+
+};
 
 class IntArray {
 private:
@@ -11,20 +87,44 @@ private:
     int *data;
 
 public:
-    IntArray() {
-        size = 0;
-        data = new int[size];
-    }
-
     explicit IntArray(size_t size) :
             size(size),
-            data(new int[size]) {};
+            data(new int[size])
+    {
+        for (size_t i = 0; i < size; i++) {
+            data[i] = 0;
+        }
+    };
+
+    // Конструктор копирования вызывается при копировании объекта:
+    // - при создании нового объекта путем копирования
+    // - при передаче объекта в функции по значению
+    IntArray(IntArray const &array) :
+            size(array.size),
+            data(new int[size])
+    {
+        for (size_t i = 0; i < size; i++) {
+            data[i] = array.data[i];
+        }
+    }
 
     ~IntArray() {
         delete[] data;
     }
 
-    size_t getSize() {
+    IntArray &operator=(IntArray const &array) {
+        if (this != &array) {
+            IntArray(array).swap(*this);
+        }
+        return *this;
+    }
+
+    void swap(IntArray &array) {
+        std::swap(size, array.size);
+        std::swap(data, array.data);
+    }
+
+    size_t getSize() const {
         return this->size;
     }
 

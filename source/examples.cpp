@@ -6,6 +6,18 @@
 #include <malloc.h>
 #include "../headers/examples.h"
 
+void FormattedFile::write(int i) {
+    std::cout << "write of FormattedFile\n";
+}
+
+void FormattedFile::write(double d) {
+    std::cout << "write of FormattedFile\n";
+}
+
+void File::write(const char *s) {
+    std::cout << "write of File\n";
+}
+
 void const_examples() {
     int a = 100;
     int b = 200;
